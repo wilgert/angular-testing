@@ -15,35 +15,24 @@ describe('BillingFormComponent', () => {
     .compileComponents();
   }));
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(BillingFormComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  // store the component and the fixture at this point so we can reuse them later
 
   it('should show a warning when the users doesn\'t enter a postcode', () => {
-    expect(fixture.nativeElement.querySelector('[data-test="postcodeWarning"]')).not.toBeTruthy();
-    fixture.nativeElement.querySelector('button').click();
-    fixture.detectChanges();
-
-    expect(fixture.nativeElement.querySelector('[data-test="postcodeWarning"]')).toBeTruthy();
+    // click on the form submit button
+    // verify that the postcodeWarning element is visible
   });
 
   it('should store the values entered in the form on the component', () => {
+    // use the component we stored earlier and its billingForm property to directly manipulate values
     component.billingForm.controls['fullname'].setValue('John Doe');
-    const addressGroup: FormGroup = component.billingForm.controls['address'] as FormGroup;
-    addressGroup.controls['addressLine'].setValue('Sieraadstraat 1');
-    addressGroup.controls['postcode'].setValue('1000 AA');
-    addressGroup.controls['city'].setValue('Amsterdam');
 
-    fixture.nativeElement.querySelector('button').click();
-    expect(component.sendBillTo).toEqual({
-      fullname: 'John Doe',
-      address: {
-        addressLine: 'Sieraadstraat 1',
-        postcode: '1000 AA',
-        city: 'Amsterdam'
-      }
-    });
+    // The address property of the billingForm
+    const addressGroup: FormGroup = component.billingForm.controls['address'] as FormGroup;
+
+    // now fill out the remaining required fields of the form
+
+    // click the submit button
+
+    // Expect that the sendBillTo object on the controller is now a javascript object with the values you just entered
   });
 });
