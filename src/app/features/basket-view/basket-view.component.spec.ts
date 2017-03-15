@@ -36,63 +36,76 @@ describe('Basket View Component', () => {
   });
 
   it ('should show a product', () => {
-    // Add a product to the basket
-    // expect that there is a Table Row element for the cart-product
-    // Remind that you need to trigger change detection to update the view
+    basketService.addProduct(product1);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('tr[data-e2e-id=cart-product]')).toBeTruthy();
   });
 
   it ('should be possible to remove a product', () => {
-    // We're going to check whether this method will be invoked when the remove button is clicked
     spyOn(basketService, 'removeProduct');
     basketService.addProduct(product1);
     fixture.detectChanges();
-
-    // The basket now contains 1 product. Click its remove button to trigger the method
-
-    // inspect whether the method we spied on has been invoked
+    const element = fixture.debugElement.query(By.css('span[data-e2e-id=cart-remove-product]'));
+    element.triggerEventHandler('click', null);
+    fixture.detectChanges();
+    expect(basketService.removeProduct).toHaveBeenCalledWith(product1);
   });
 
   it ('should show the decrease product quantity if product quantity is more then one', () => {
     basketService.addProduct(product1);
     basketService.addProduct(product1);
-    // Note that change detection has not run yet
-    // check whether the decrease button is enabled
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('span[disabled="true"]')).toBeFalsy();
   });
 
   it ('should not show the decrease product quantity if product quantity is one or less', () => {
-    // Add 1 product to the basket and check that the decrease button is disabled
+    basketService.addProduct(product1);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('span[disabled="true"]')).toBeTruthy();
   });
 
   it ('should be possible to decrease the product quantity', () => {
-    // Add 2 products to the basket
-    // Click on the decrease button
-    // Check that the basketService only contains 1 item
+    basketService.addProduct(product1);
+    basketService.addProduct(product1);
+    fixture.detectChanges();
+    const element = fixture.debugElement.query(By.css('span[data-e2e-id=cart-product-decrease-quantity]'));
+    element.triggerEventHandler('click', null);
+    fixture.detectChanges();
+    expect(basketService.getTotalItems()).toBe(1);
   });
 
   it ('should be possible to increase the product quantity', () => {
-    // Add a product to the basket
-    // click on the product quantity increase button
-    // check that the basketservice contains 2 items
+    basketService.addProduct(product1);
+    fixture.detectChanges();
+    const element = fixture.debugElement.query(By.css('span[data-e2e-id=cart-product-increase-quantity]'));
+    element.triggerEventHandler('click', null);
+    fixture.detectChanges();
+    expect(basketService.getTotalItems()).toBe(2);
   });
 
   it ('should show the total product price', () => {
-    // add the same product a number of times to the basket
-
-    // check that the cart-product-total-price cell contains the total price for the product
+    basketService.addProduct(product1);
+    basketService.addProduct(product1);
+    basketService.addProduct(product1);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('td[data-e2e-id=cart-product-total-price]').innerText).toEqual('€6.00');
   });
 
   it ('should show the total basket price', () => {
-    // add a number of direrent products to the basket
-    // Check that the cart-total-price cell contains the sum of all total prices
+    basketService.addProduct(product1);
+    basketService.addProduct(product1);
+    basketService.addProduct(product2);
+    fixture.detectChanges();
+    expect(fixture.nativeElement.querySelector('td[data-e2e-id=cart-total-price]').innerText).toEqual('€7.25');
   });
 
   it('should navigate to the biling page upon clicking the button', () => {
-    // Get the injected instance (the mock we defined) of the Router so we can spy upon it
     const router = fixture.debugElement.injector.get(Router);
     spyOn(router, 'navigate');
-
-    // add a product to the basket
-    // click on the button to purchase the product in the basket
-    // check that the method we spied upon has been called to navigate to the 'billing' route
+    basketService.addProduct(product1);
+    fixture.detectChanges();
+    fixture.nativeElement.querySelector('button').click();
+    fixture.detectChanges();
+    expect(router.navigate).toHaveBeenCalledWith(['billing']);
   });
 });

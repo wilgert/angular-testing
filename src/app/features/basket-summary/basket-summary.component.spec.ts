@@ -31,10 +31,10 @@ describe('Basket Summary Component', () => {
   });
 
   it ('should show the total items', () => {
-    // Find the summary count element and inspect its value
+    expect(fixture.nativeElement.querySelector('span[data-e2e-id=cart-summary-product-count]').innerText).toEqual('8');
   });
 
   it ('should show the total price', () => {
-    // find the total price element and inspect its value
+    expect(fixture.nativeElement.querySelector('span[data-e2e-id=cart-summary-total-price]').innerText).toEqual('€22.25');
   });
 });

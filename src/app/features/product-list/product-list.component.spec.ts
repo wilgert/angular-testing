@@ -43,19 +43,19 @@ describe('Product List Component', () => {
     });
 
     it ('should show all products in the list', () => {
-      // check that the number of product divs equals the number of products in the list
+      expect(fixture.nativeElement.querySelectorAll('div#products div.product').length).toBe(2);
     });
   });
 
   describe('a product item', () => {
     it ('should have a title', () => {
-      // check that there are as manyu product titles as products
-      // Check that the correct titles are shown for each product
+      expect(fixture.nativeElement.querySelectorAll('div.product h3').length).toBe(2);
+      expect(fixture.nativeElement.querySelector('div.product h3').innerText).toEqual('Mock Product 1');
     });
 
     it ('should have a price', () => {
-      // check that there are as many price elements as products in the list
-      // check that the correct prices are shown for each product
+      expect(fixture.nativeElement.querySelectorAll('div.product h4.price').length).toBe(2);
+      expect(fixture.nativeElement.querySelector('div.product h4.price').innerText).toEqual('€14.95');
     });
 
     it ('should have a button to add the product to the basket', () => {
@@ -63,17 +63,19 @@ describe('Product List Component', () => {
     });
 
     it ('should add the product to the cart when the button is clicked', () => {
-      // Obtain the injected instance of the BasketService so we can spy on its methods
       let basketService = fixture.debugElement.injector.get(BasketService);
       spyOn(basketService, 'addProduct');
-
-      // click on the button of a product to add it to the basket
-      // check that the method we just spied on has been called with the corresponding product
+      const element = fixture.debugElement.query(By.css('div.product a.btn-green'));
+      element.triggerEventHandler('click', null);
+      fixture.detectChanges();
+      expect(basketService.addProduct).toHaveBeenCalledWith(mockProducts[0]);
     });
 
     it ('should show alert when product is added', () => {
-      // click on the button of a product to add it to the basket
-      // check that there is an alert element
+      const element = fixture.debugElement.query(By.css('div.product a.btn-green'));
+      element.triggerEventHandler('click', null);
+      fixture.detectChanges();
+      expect(fixture.nativeElement.querySelector('div.alert')).toBeTruthy();
     });
   });
 });
