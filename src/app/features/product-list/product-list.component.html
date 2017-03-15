@@ -1,0 +1,23 @@
+<div id="products" class="row">
+    <div class="alert alert-success" role="alert" *ngIf="_showAlert">
+        <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+        <span class="sr-only">Success:</span>
+        <span data-e2e-id="product-added-alert">The item has been added to your cart</span>
+    </div>
+
+    <div class="col-sm-4 col-md-3" *ngFor="let product of products">
+        <div class="product">
+            <div style="height: 50px;">
+                <img src="src/app/assets/images/{{product.image}}" alt="{{product.name}}" title="{{product.name}}"/>
+            </div>
+            <h3>{{product.name}}</h3>
+            <p>{{product.description}}</p>
+            <h4 class="price">{{product.price | currency:'EUR':true:'1.2-2'}}</h4>
+            <div>
+                <div class="wrapper bottom">
+                    <a class="btn-green" (click)="addToCart(product)">Add to cart</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

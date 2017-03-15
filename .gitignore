@@ -1,0 +1,8 @@
+.idea
+node_modules
+*.log
+_*
+/src/app/**/*.js
+/e2e/**/*.js
+/**/main.js
+/**/*.map
