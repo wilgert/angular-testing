@@ -1,0 +1,70 @@
+<div class="alert alert-success" role="alert" *ngIf="false">
+    <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+    <span data-e2e-id="order-placed-alert">Thank you! Your order was successfully placed!</span>
+</div>
+
+<div class="alert alert-warning" role="alert" data-e2e-id="cart-empty-alert" *ngIf="getBasketTotalItems() === 0">
+    Your cart is empty
+</div>
+
+<div *ngIf="getBasketTotalItems() > 0">
+
+
+    <div class="table-responsive col-lg-12" *ngIf="getBasketTotalItems() > 0">
+
+        <table class="table table-striped cart">
+
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+                <th>Quantity</th>
+                <th>Amount</th>
+                <th>Total</th>
+            </tr>
+            </thead>
+            <tfoot>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>Total:</td>
+                <td data-e2e-id="cart-total-price">{{ getBasketTotalPrice() | currency:'EUR':true:'1.2-2' }}</td>
+            </tr>
+            </tfoot>
+            <tbody>
+            <tr data-e2e-id="cart-product" *ngFor="let item of getBasketItems() | async">
+                <td><span data-e2e-id="cart-remove-product" (click)="removeProduct(item)"
+                          class="glyphicon glyphicon-remove"></span></td>
+
+                <td>{{ item.product.name }}</td>
+                <td><span class="glyphicon glyphicon-minus" [attr.disabled]="item.quantity <= 1 ? true : null"
+                          (click)="decreaseProductQuantity(item)" data-e2e-id="cart-product-decrease-quantity"></span>&nbsp;&nbsp;
+                    {{ item.quantity | number }}&nbsp;&nbsp;
+                    <span class="glyphicon glyphicon-plus" (click)="increaseProductQuantity(item)"
+                          data-e2e-id="cart-product-increase-quantity"></span></td>
+                <td>{{ item.product.price| currency:'EUR':true:'1.2-2' }}</td>
+                <td data-e2e-id="cart-product-total-price">{{ getProductTotalPrice(item) | currency:'EUR':true:'1.2-2'
+                    }}
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <style>
+        .cart span {
+            cursor: pointer;
+        }
+
+        .cart .glyphicon.disabled {
+            color: #aaa;
+        }
+    </style>
+
+</div>
+
+<div class="col-lg-12" *ngIf="getBasketTotalItems() > 0">
+    <div class="wrapper">
+        <button class="btn-green" data-e2e-id="finalize-button" (click)="finalize()">Buy now!</button>
+    </div>
+</div>
